@@ -1,13 +1,16 @@
-import { findPlayer } from "../../globals/player.aux";
+import { findCapitalShip, findPlayer } from "../../globals/player.aux";
 import { Enemy } from "./dungeon.interfaces";
 
 let SuperEnemy: Enemy | null = null
 
 export async function getListOfDungeonsAvalibles(userId: number) {
   const player = findPlayer(userId)
-  if(!player) return
+  if(!player || 'error' in player) return player
 
-  return 4;
+  const ship = findCapitalShip(player.capitalShipId)
+  if(!ship || 'error' in ship) return ship
+
+  return ship.dungeonAvalibles;
 }
 
 export async function getCreateEnemy(userId: number, level: number):Promise<Enemy> {
@@ -27,7 +30,7 @@ export async function getCreateEnemy(userId: number, level: number):Promise<Enem
 export async function getEndTurn(userId: number, actions: string[]) {
   const player = findPlayer(userId)
 
-  if(!player) return
+  if(!player || 'error' in player) return
 
   let countOfAttacks: number = 0
   let countOfDefenses: number = 0

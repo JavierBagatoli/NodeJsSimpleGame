@@ -1,16 +1,17 @@
 import { Router } from "express";
 import { getCreateEnemy, getListOfDungeonsAvalibles, getEndTurn } from "./dungeon.service";
+import { ErrorFindData } from "../../globals/error.interface";
 
 const router = Router();
 
 router.post("/list-dungeons", async (req, res ) => {
   const { idUser } = req?.body;
 
-  const list = await getListOfDungeonsAvalibles(idUser);
+  const list : number[] | ErrorFindData = await getListOfDungeonsAvalibles(idUser);
 
-  if (!list) {
+  if (!list || "error" in list) {
     return res.status(404).json({
-      error: "Jugador no encontrado"
+      error: list.error
     });
   }
 
