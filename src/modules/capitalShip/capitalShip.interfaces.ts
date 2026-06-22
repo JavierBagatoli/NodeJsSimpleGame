@@ -1,5 +1,7 @@
 export interface CapitalShip {
     id: number,
-    username: string,
+    name: string,
     dungeonAvalibles: number[]
+    idZone: number,
+    idLeader: number,
 }

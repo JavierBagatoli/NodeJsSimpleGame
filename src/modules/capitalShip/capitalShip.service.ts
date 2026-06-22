@@ -1,26 +1,7 @@
-export interface CapitalShip {
-  id: number;
-  name: string;
-  government: string;
-}
-
-const listCapitalShips = [
-  {
-    id: 1,
-    name: "Terra Nova",
-    government: "Republic",
-  },
-  {
-    id: 2,
-    name: "Zarkon Prime",
-    government: "Empire",
-  },
-  {
-    id: 3,
-    name: "Aetheria",
-    government: "Federation",
-  },
-];
+import { dataFakeCapitalShips } from "../../fakeData/dataFakeCapitalShips.data";
+import { findCapitalShip, findPlayer } from "../../globals/player.aux";
+import { getPlayer } from "../player/player.service";
+import { CapitalShip } from "./capitalShip.interfaces";
 
 export interface player {
     id: 1,
@@ -45,7 +26,7 @@ export async function getPlayerCapitalShip(userId: number) {
     throw new Error("Jugador no encontrado");
   }
 
-  const capitalShip: CapitalShip | undefined = listCapitalShips.find(
+  const capitalShip: CapitalShip | undefined = dataFakeCapitalShips.find(
     (p) => p.id === player.capitalShipId
   );
 
@@ -56,7 +37,7 @@ export async function getPlayerCapitalShip(userId: number) {
   return capitalShip;
 }
 
-export async function changeCapitalShip(userId: number, capitalShipId: number) {
+export async function postMoveCapitalShip(userId: number) {
   const player = players.find(
     (p) => p.id === userId
   );
@@ -65,19 +46,36 @@ export async function changeCapitalShip(userId: number, capitalShipId: number) {
     throw new Error("Jugador no encontrado");
   }
 
-  const capitalShip = listCapitalShips.find(
-    (p) => p.id === capitalShipId
+  const capitalShip: CapitalShip | undefined = dataFakeCapitalShips.find(
+    (p) => p.id === player.capitalShipId
   );
 
-  if (!capitalShip) {
-    throw new Error("capitalShipa no existe");
+  if(!capitalShip){
+    throw new Error("No tiene nave capital");
   }
 
+  return capitalShip;
+}
+
+/**
+ * 
+ * @param userId 
+ * @param capitalShipId 
+ * @param zona 
+ * @returns 
+ */
+export async function changeCapitalShip(userId: number, capitalShipId: number, zona: number) {
+  const player =  findPlayer(userId)
+  if("error" in player) return player
+
+  const capitalShip = findCapitalShip(capitalShipId)
+  if("error" in capitalShip) return capitalShip
+
+  if(player.id !== capitalShip.idLeader) return {error: "No tiene permiso para controlar la nave capital"}
+  
   player.capitalShipId = capitalShipId;
 
   return {
-    success: true,
-    message: `Ahora perteneces a ${capitalShip.name}`,
-    capitalShip,
+    message: `${capitalShip.name} se ha movido a la zona ${zona}`,
   };
 }
