@@ -27,6 +27,18 @@ export const playerMock: Player = {
     lifePlayer: 10,
     enemy: null,
     lastDeathOnDungeon: null
+  },
+  invetory: [],
+  equipment: {
+    idWeapon: 0,
+    idShield: 0,
+    idArmor: 0,
+    idRoom0: 0,
+    idRoom1: 0,
+    idRoom2: 0,
+    idRoom3: 0,
+    idRoom4: 0,
+
   }
 }
 

@@ -9,7 +9,9 @@ export interface Player {
   potions: PlayerPotions,
   resourses: PlayerResourses,
   stats: PlayerStats
-  dungeonInfo: DungeonInfoPlayer
+  dungeonInfo: DungeonInfoPlayer,
+  invetory: number[]
+  equipment: Equipment
 }
 
 export interface PlayerStats{
@@ -37,3 +39,18 @@ export interface DungeonInfoPlayer{
     enemy: Enemy | null
     lastDeathOnDungeon: string | null
 }
+
+export interface playerInvetory{
+    id: number
+}
+
+export interface Equipment  {
+    idWeapon: number,
+    idShield: number,
+    idArmor: number,
+    idRoom0: number,
+    idRoom1: number,
+    idRoom2: number,
+    idRoom3: number,
+    idRoom4: number,
+  }
