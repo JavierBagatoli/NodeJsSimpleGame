@@ -45,6 +45,14 @@ router.post("/end-turn", async (req, res ) => {
     return res.status(404).json({
       error: "Sin enemigo"
     });
+  }else if(list === 3){
+    return res.status(404).json({
+      error: "Has Muerto"
+    });
+  }else if(list === 4){
+    return res.status(404).json({
+      error: "Solo puede jugar una dungeon al dia"
+    });
   }
 
 

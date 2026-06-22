@@ -1,7 +1,6 @@
+import { ErrorFindData } from "../../globals/error.interface";
 import { findCapitalShip, findPlayer } from "../../globals/player.aux";
 import { Enemy } from "./dungeon.interfaces";
-
-let SuperEnemy: Enemy | null = null
 
 export async function getListOfDungeonsAvalibles(userId: number) {
   const player = findPlayer(userId)
@@ -13,8 +12,10 @@ export async function getListOfDungeonsAvalibles(userId: number) {
   return ship.dungeonAvalibles;
 }
 
-export async function getCreateEnemy(userId: number, level: number):Promise<Enemy> {
-  const player = findPlayer(userId)
+export async function getCreateEnemy(userId: number, level: number):Promise<Enemy | ErrorFindData> {
+  let player = findPlayer(userId)
+
+  if(!player || "error" in player) return player
 
   const enemy: Enemy = {
     dificultad: level,
@@ -22,15 +23,20 @@ export async function getCreateEnemy(userId: number, level: number):Promise<Enem
     states: []
   }
 
-  SuperEnemy = enemy
+  player.dungeonInfo.enemy = enemy
 
   return enemy;
 }
 
 export async function getEndTurn(userId: number, actions: string[]) {
-  const player = findPlayer(userId)
+  const todayDate = new Date();
+  const shortFormDate = `${todayDate.getDate()}-${todayDate.getMonth()+1}`
+
+  let player = findPlayer(userId)
 
   if(!player || 'error' in player) return
+
+  if(player.dungeonInfo.lastDeathOnDungeon === shortFormDate) return 4
 
   let countOfAttacks: number = 0
   let countOfDefenses: number = 0
@@ -45,12 +51,39 @@ export async function getEndTurn(userId: number, actions: string[]) {
     }
   })
 
-  if(!SuperEnemy)return 2
+  let enemyForPlayer = player.dungeonInfo.enemy
+  if(!enemyForPlayer) return 2
 
-  SuperEnemy = {
-    ...SuperEnemy,
-    life: SuperEnemy.life -10*countOfAttacks
+  player.dungeonInfo.enemy = {
+    ...enemyForPlayer,
+    life: enemyForPlayer.life -1*countOfAttacks
   }
 
-   return SuperEnemy;
+  if(player.dungeonInfo.enemy.life > 0){
+    player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
+    if(player.dungeonInfo.lifePlayer <= 0){
+      player.dungeonInfo.enemy = null
+      player.dungeonInfo.lastDeathOnDungeon = shortFormDate
+      return 3
+    }
+  }
+
+
+  if(player.dungeonInfo.enemy.life <= 0){
+    const typeResource = player.dungeonInfo.enemy.dificultad % 4
+    if(typeResource === 0){
+      player.resourses.circuits = player.resourses.circuits+1
+    }else if(typeResource === 1){
+      player.resourses.cores = player.resourses.cores+1
+    }else if(typeResource === 2){
+    player.resourses.cristals = player.resourses.cristals+1
+    }else if(typeResource === 3){
+      player.resourses.metals = player.resourses.metals+1
+    }
+
+    player.dungeonInfo.enemy.life = Math.round(Math.random()*10*player.dungeonInfo.enemy.dificultad),
+    player.dungeonInfo.enemy.states = []
+  }
+
+   return enemyForPlayer;
 }

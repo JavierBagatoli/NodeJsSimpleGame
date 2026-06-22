@@ -19,7 +19,14 @@ export const playerMock: Player = {
   stats:{
     damage: 0,
     defense: 0,
-    actions: 0,
+    actions: 2,
+  },
+  dungeonInfo:{
+    level: 1,
+    maxLifePlayer: 10,
+    lifePlayer: 10,
+    enemy: null,
+    lastDeathOnDungeon: null
   }
 }
 
