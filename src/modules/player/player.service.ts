@@ -81,10 +81,7 @@ export async function setInvetory(userId: number, idSlot: string, idItem: number
   
     default:
       return errorItem()
-
   }
-
-   return player;
 }
 
 function errorItem(){

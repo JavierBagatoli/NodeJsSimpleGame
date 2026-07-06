@@ -1,10 +1,11 @@
 import { Router } from "express";
 import { getCreateEnemy, getListOfDungeonsAvalibles, getEndTurn } from "./dungeon.service";
 import { ErrorFindData } from "../../globals/error.interface";
+import { verifyFirebaseToken } from "../auth/auth.midlleware";
 
 const router = Router();
 
-router.post("/list-dungeons", async (req, res ) => {
+router.post("/list-dungeons",verifyFirebaseToken, async (req, res ) => {
   const { idUser } = req?.body;
 
   const list : number[] | ErrorFindData = await getListOfDungeonsAvalibles(idUser);
@@ -22,9 +23,6 @@ router.post("/create-monster", async (req, res ) => {
   const { idUser, level } = req.body;
 
   const monster = await getCreateEnemy(idUser, level);
-
-
-
   res.json(monster);
 });
 
