@@ -1,6 +1,6 @@
 import { ErrorFindData } from "../../globals/error.interface";
 import { findCapitalShip, findPlayer } from "../../globals/player.aux";
-import { Enemy } from "./dungeon.interfaces";
+import { EnemyStatscontrol } from "./dungeon.interfaces";
 
 export async function getListOfDungeonsAvalibles(userId: number) {
   const player = findPlayer(userId)
@@ -12,15 +12,32 @@ export async function getListOfDungeonsAvalibles(userId: number) {
   return ship.dungeonAvalibles;
 }
 
-export async function getCreateEnemy(userId: number, level: number):Promise<Enemy | ErrorFindData> {
+export async function getCreateEnemy(userId: number, level: number):Promise<EnemyStatscontrol | ErrorFindData> {
   let player = findPlayer(userId)
 
   if(!player || "error" in player) return player
 
-  const enemy: Enemy = {
-    dificultad: level,
-    life: Math.round(Math.random()*10*level),
-    states: []
+  const expectedLife = Math.round(Math.random()*10*(level+1))
+
+  const enemy: EnemyStatscontrol = {
+    idTypeImage: Math.floor(Math.random()*5),
+    dificultad: level+1,
+    life: expectedLife,
+    lifeMax: expectedLife,
+    bonos: {
+      defense: 0,
+      attack: 0,
+      actions: 0,
+      luck: 0
+    },
+    baseAttack: 1,
+    actions: 1,
+    actionsMax: 1,
+    states: [],
+    debuf: {
+        poison: 0,
+        slowness: 0,
+    }
   }
 
   player.dungeonInfo.enemy = enemy
@@ -60,7 +77,7 @@ export async function getEndTurn(userId: number, actions: string[]) {
   }
 
   if(player.dungeonInfo.enemy.life > 0){
-    player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
+    //player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
     if(player.dungeonInfo.lifePlayer <= 0){
       player.dungeonInfo.enemy = null
       player.dungeonInfo.lastDeathOnDungeon = shortFormDate
@@ -81,9 +98,10 @@ export async function getEndTurn(userId: number, actions: string[]) {
       player.resourses.metals = player.resourses.metals+1
     }
 
-    player.dungeonInfo.enemy.life = Math.round(Math.random()*10*player.dungeonInfo.enemy.dificultad),
-    player.dungeonInfo.enemy.states = []
-  }
-
+    player.dungeonInfo.enemy = null
+    const newEnemy = await getCreateEnemy(userId, player.dungeonInfo.level)?? null
+    if("life" in newEnemy)
+      player.dungeonInfo.enemy = newEnemy;
+    }
    return enemyForPlayer;
 }

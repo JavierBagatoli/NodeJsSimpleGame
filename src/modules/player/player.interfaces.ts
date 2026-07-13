@@ -1,4 +1,4 @@
-import { Enemy } from "../dungeon/dungeon.interfaces"
+import { EnemyStatscontrol } from "../dungeon/dungeon.interfaces"
 
 export interface Player {
   id: number,
@@ -36,7 +36,7 @@ export interface DungeonInfoPlayer{
     level: number,
     maxLifePlayer: number,
     lifePlayer: number,
-    enemy: Enemy | null
+    enemy: EnemyStatscontrol | null
     lastDeathOnDungeon: string | null
 }
 
