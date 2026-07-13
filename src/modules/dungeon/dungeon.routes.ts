@@ -21,7 +21,6 @@ router.post("/list-dungeons",verifyFirebaseToken, async (req, res ) => {
 
 router.post("/create-monster", async (req, res ) => {
   const { idUser, level } = req.body;
-
   const monster = await getCreateEnemy(idUser, level);
   res.json(monster);
 });
