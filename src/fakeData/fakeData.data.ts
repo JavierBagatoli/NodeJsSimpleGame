@@ -30,7 +30,7 @@ export const playerMock: Player = {
   },
   invetory: [],
   equipment: {
-    idWeapon: 0,
+    idWeapon: 50,
     idShield: 0,
     idArmor: 0,
     idRoom0: 0,

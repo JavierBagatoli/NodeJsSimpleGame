@@ -1,3 +1,4 @@
+import { dataFakeItemBase } from "../../fakeData/fakeBiblioteca.data";
 import { ErrorFindData } from "../../globals/error.interface";
 import { findCapitalShip, findPlayer } from "../../globals/player.aux";
 import { EnemyStatscontrol } from "./dungeon.interfaces";
@@ -37,6 +38,8 @@ export async function getCreateEnemy(userId: number, level: number):Promise<Enem
     debuf: {
         poison: 0,
         slowness: 0,
+        fire: 0,
+        fragil: 0,
     }
   }
 
@@ -71,9 +74,38 @@ export async function getEndTurn(userId: number, actions: string[]) {
   let enemyForPlayer = player.dungeonInfo.enemy
   if(!enemyForPlayer) return 2
 
+  let slownessDamage = enemyForPlayer.debuf.slowness > 0 ? enemyForPlayer.debuf.slowness -1: 0;
+  let poisonDamage = enemyForPlayer.debuf.poison > 0 ? enemyForPlayer.debuf.poison -1: 0;
+  let fireDamage = enemyForPlayer.debuf.fire > 0 ? enemyForPlayer.debuf.fire -1: 0;
+  let fragilDamage = enemyForPlayer.debuf.fragil > 0 ? enemyForPlayer.debuf.fragil -1: 0;
+
+  if(dataFakeItemBase[player.equipment.idWeapon]?.buff.length > 0){
+    const item = dataFakeItemBase[player.equipment.idWeapon]
+
+    item.buff.forEach(buff => {
+      if(buff.prop < Math.random()*100){
+        if(buff.type === 'slow'){
+          slownessDamage++
+        }else if(buff.type === 'poison'){
+          poisonDamage++
+        }else if(buff.type === 'fire'){
+          fireDamage++
+        }else if(buff.type === 'fragil'){
+          fragilDamage++
+        }
+      }
+    })
+  }  
+
   player.dungeonInfo.enemy = {
     ...enemyForPlayer,
-    life: enemyForPlayer.life -1*countOfAttacks
+    life: enemyForPlayer.life -1*countOfAttacks,
+    debuf:{
+      slowness: slownessDamage,
+      poison: poisonDamage,
+      fire: fireDamage,
+      fragil: fragilDamage,
+    }
   }
 
   if(player.dungeonInfo.enemy.life > 0){
@@ -84,7 +116,6 @@ export async function getEndTurn(userId: number, actions: string[]) {
       return 3
     }
   }
-
 
   if(player.dungeonInfo.enemy.life <= 0){
     const typeResource = player.dungeonInfo.enemy.dificultad % 4
@@ -100,8 +131,12 @@ export async function getEndTurn(userId: number, actions: string[]) {
 
     player.dungeonInfo.enemy = null
     const newEnemy = await getCreateEnemy(userId, player.dungeonInfo.level)?? null
-    if("life" in newEnemy)
+
+    if("life" in newEnemy){
       player.dungeonInfo.enemy = newEnemy;
+    }
+
+    //update Inventario
     }
    return enemyForPlayer;
 }

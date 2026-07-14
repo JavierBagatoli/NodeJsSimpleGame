@@ -18,6 +18,8 @@ export interface EnemyStatscontrol extends StatsControl{
     debuf: {
         poison: number,
         slowness: number,
+        fire: number,
+        fragil: number,
     }
     states: string[]
 }
