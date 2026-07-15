@@ -10,7 +10,7 @@ export interface Player {
   resourses: PlayerResourses,
   stats: PlayerStats
   dungeonInfo: DungeonInfoPlayer,
-  invetory: number[]
+  invetory: InvetoryItemPlayer[]
   equipment: Equipment
 }
 
@@ -44,7 +44,7 @@ export interface playerInvetory{
     id: number
 }
 
-export interface Equipment  {
+export interface Equipment{
     idWeapon: number,
     idShield: number,
     idArmor: number,
@@ -53,4 +53,9 @@ export interface Equipment  {
     idRoom2: number,
     idRoom3: number,
     idRoom4: number,
-  }
+}
+
+export interface InvetoryItemPlayer{
+  id: number;
+  cantidad: number
+}
