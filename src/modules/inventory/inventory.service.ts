@@ -12,6 +12,8 @@ export async function setInvetory(userId: number, idSlot: string, idItem: number
   let player = findPlayer(userId)
   if("error" in player) return player;
 
+  if(!player.invetory.find(item => item.id === idItem)) return {error: `El usuario no dispone del item ${idItem}`}
+
   if(!dataFakeItemBase[idItem]) return
   switch (idSlot.split("-")[1]) {
     case 'weapon':

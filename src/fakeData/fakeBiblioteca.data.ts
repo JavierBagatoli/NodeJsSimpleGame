@@ -4,10 +4,35 @@ export interface Item {
   description: string;
   type: 'weapon' | 'armor' | 'shield' | 'room';
   damage: number,
-  buff: {type: 'slow' | 'poison' | 'fire' | 'fragil', prop: number, damage: number}[]
+  buff: BuffItem[],
+  coste: ItemCost,
+}
+
+export interface ItemCost {
+  circuito?: number,
+  nucleo?: number,
+  metal?: number,
+  cristal?: number
+}
+
+export interface BuffItem {
+  type: 'slow' | 'poison' | 'fire' | 'fragil',
+  prop: number,
+  damage: number
 }
 
 export const dataFakeItemBase: Record<number, Item> = {
+  0: {
+    id: 0,
+    title: "guantes",
+    description: "...",
+    type: 'weapon',
+    damage: 1,
+    buff: [],
+    coste:{
+      metal: 0,
+    }
+  },
   1: {
     id: 1,
     title: "Arma",
@@ -15,6 +40,9 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    coste:{
+      metal: 0,
+    }
   },
   2: {
     id: 2,
@@ -23,6 +51,9 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    coste:{
+      metal: 0,
+    }
   },
   3: {
     id: 3,
@@ -31,6 +62,9 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    coste:{
+      metal: 10,
+    }
   },
   4: {
     id: 4,
@@ -39,6 +73,9 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 0,
     buff: [],
+    coste:{
+      metal: 0,
+    },
   },
   5: {
     id: 5,
@@ -47,6 +84,9 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    coste:{
+      metal: 0,
+    },
   },
   6: {
     id: 6,
@@ -55,6 +95,9 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    coste:{
+      metal: 0,
+    },
   },
   50:{
     id:50,
@@ -67,5 +110,8 @@ export const dataFakeItemBase: Record<number, Item> = {
       prop: 33,
       damage: 0}
     ],
+    coste:{
+      metal: 0,
+    },
   }
 };

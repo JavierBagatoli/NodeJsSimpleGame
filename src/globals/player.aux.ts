@@ -9,7 +9,7 @@ export function findPlayer(userId: number): Player | ErrorFindData {
   const player = dataFakePlayers.find(
     (p) => p.id === userId
   );
-
+  
   if (!player) {
     return {error: i18n.spainsh.errors.playerNotFound}
   }
