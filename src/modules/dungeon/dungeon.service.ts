@@ -137,6 +137,26 @@ export async function getEndTurn(userId: number, actions: string[]) {
     }
 
     //update Inventario
+    const suerte: number = 1
+    const drop = Math.random()* 100 < 10*suerte
+
+    if(drop){
+      switch (player.dungeonInfo.level % 4) {
+        case 0:
+          player.resourses.metals = ++player.resourses.metals
+          break;
+        case 1:
+          player.resourses.cristals = ++player.resourses.cristals
+          break;
+        case 2:
+          player.resourses.circuits = ++player.resourses.circuits
+          break;
+        case 3:
+          player.resourses.cores = ++player.resourses.cores
+          break;
+      }
     }
+    //retornar el item que gano, para activar la animacion
+  }
    return enemyForPlayer;
 }

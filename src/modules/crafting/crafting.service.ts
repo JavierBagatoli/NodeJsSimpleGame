@@ -16,6 +16,13 @@ export const tryBuyItemForPlayer = (userId: number, itemId: number) => {
 
   if(!(difCircuitos >= 0) || !(difMetal >= 0)  || !(difCore >= 0)  || !(difCristals >= 0) ) return {error: "No dispone de recursos suficientes"}
 
+  player.resourses = {
+    circuits: difCircuitos,
+    metals: difMetal,
+    cores: difCore,
+    cristals: difCristals,
+  }
+
   const postItem = player.invetory.findIndex(item => item.id === itemId)
 
   let response = {}
