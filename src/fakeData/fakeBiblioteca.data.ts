@@ -5,6 +5,7 @@ export interface Item {
   type: 'weapon' | 'armor' | 'shield' | 'room';
   damage: number,
   defense: number,
+  actions: number,
   buff: BuffItem[],
   coste: ItemCost,
 }
@@ -30,6 +31,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       metal: 0,
@@ -42,6 +44,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       metal: 3,
@@ -54,6 +57,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       metal: 3,
@@ -66,6 +70,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       metal: 5,
@@ -78,6 +83,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -91,6 +97,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -104,6 +111,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -117,6 +125,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -130,6 +139,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -143,6 +153,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -156,6 +167,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -169,6 +181,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -182,6 +195,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -195,6 +209,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -208,6 +223,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -221,6 +237,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -234,6 +251,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -247,6 +265,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -260,6 +279,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -273,6 +293,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 1,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -286,6 +307,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -299,6 +321,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       cristal: 1,
@@ -314,6 +337,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       metal: 0,
@@ -326,6 +350,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'armor',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       metal: 0,
@@ -338,6 +363,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'shield',
     damage: 0,
     buff: [],
+    actions: 0,
     defense: 0,
     coste:{
       metal: 0,
@@ -350,6 +376,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     type: 'weapon',
     damage: 2,
     defense: 0,
+    actions: 0,
     buff: [{
       type: 'slow',
       prop: 33,

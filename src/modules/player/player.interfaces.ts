@@ -10,14 +10,17 @@ export interface Player {
   resourses: PlayerResourses,
   stats: PlayerStats
   dungeonInfo: DungeonInfoPlayer,
-  invetory: InvetoryItemPlayer[]
-  equipment: Equipment
+  invetory: InvetoryItemPlayer[],
+  equipment: Equipment,
 }
 
 export interface PlayerStats{
     damage: number,
     defense: number,
     actions: number,
+
+    damageShip: number,
+    defenseShip: number,
 }
 
 export interface PlayerResourses{
