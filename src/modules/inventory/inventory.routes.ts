@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { getPlayer } from "../player/player.service";
-import { setInvetory } from "./inventory.service";
+import { setInvetory, updateStats } from "./inventory.service";
 
 const router = Router();
 
@@ -46,11 +46,11 @@ router.get("/:id/set/:idSlot/:idInventory", async (req, res) => {
   }
 
   const changes = await setInvetory(playerId, idSlot, playerIdinventory);
-
   if (!changes || "error" in changes) {
     return res.status(404).json(changes);
   }
-
+  updateStats(player)
+  
   res.json(changes);
 });
 

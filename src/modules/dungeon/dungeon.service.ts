@@ -59,7 +59,7 @@ export async function getEndTurn(userId: number, actions: string[]) {
   if(player.dungeonInfo.lastDeathOnDungeon === shortFormDate) return 4
 
   let countOfAttacks: number = 0
-  let countOfDefenses: number = 0
+  let countOfDefenses: number = player.stats.defense
   
   if(actions.length !== player.stats.actions){return 1}
 
@@ -99,7 +99,7 @@ export async function getEndTurn(userId: number, actions: string[]) {
 
   player.dungeonInfo.enemy = {
     ...enemyForPlayer,
-    life: enemyForPlayer.life -1*countOfAttacks,
+    life: enemyForPlayer.life -player.stats.damage*countOfAttacks,
     debuf:{
       slowness: slownessDamage,
       poison: poisonDamage,
@@ -109,7 +109,12 @@ export async function getEndTurn(userId: number, actions: string[]) {
   }
 
   if(player.dungeonInfo.enemy.life > 0){
-    //player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
+    if(countOfDefenses >= 0){
+      player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
+    }else{
+      countOfDefenses > 0? --countOfDefenses: countOfDefenses = 0
+    }
+
     if(player.dungeonInfo.lifePlayer <= 0){
       player.dungeonInfo.enemy = null
       player.dungeonInfo.lastDeathOnDungeon = shortFormDate
@@ -156,7 +161,11 @@ export async function getEndTurn(userId: number, actions: string[]) {
           break;
       }
     }
-    //retornar el item que gano, para activar la animacion
+    enemyForPlayer = {
+      ...enemyForPlayer,
+      newResourses: player.resourses
+    }
   }
-   return enemyForPlayer;
+  
+  return enemyForPlayer;
 }

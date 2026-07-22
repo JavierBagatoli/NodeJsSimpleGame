@@ -29,7 +29,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     title: "guantes",
     description: "...",
     type: 'weapon',
-    damage: 1,
+    damage: 0,
     buff: [],
     actions: 0,
     defense: 0,
@@ -42,7 +42,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     title: "Arma",
     description: "...",
     type: 'weapon',
-    damage: 1,
+    damage: 2,
     buff: [],
     actions: 0,
     defense: 0,
@@ -58,7 +58,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     damage: 0,
     buff: [],
     actions: 0,
-    defense: 0,
+    defense: 1,
     coste:{
       metal: 3,
     }
@@ -71,7 +71,7 @@ export const dataFakeItemBase: Record<number, Item> = {
     damage: 0,
     buff: [],
     actions: 0,
-    defense: 0,
+    defense: 1,
     coste:{
       metal: 5,
     }

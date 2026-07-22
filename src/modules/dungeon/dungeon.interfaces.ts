@@ -1,3 +1,5 @@
+import { PlayerResourses } from "../player/player.interfaces";
+
 export default interface StatsControl{
   life: number,
   lifeMax: number,
@@ -22,4 +24,5 @@ export interface EnemyStatscontrol extends StatsControl{
         fragil: number,
     }
     states: string[]
+    newResourses?: PlayerResourses
 }

@@ -55,8 +55,6 @@ export async function setInvetory(userId: number, idSlot: string, idItem: number
       }else if(idSlot === 'room4'){
         player.equipment.idRoom4 = idItem;
       }
-
-      updateStats(player)
       return {success: 'Equipamiento actualizado'};
   
     default:
@@ -68,7 +66,7 @@ function errorItem(){
   return {error: 'El objeto no es compatible con el ranura'}
 }
 
-function updateStats(player: Player){
+export function updateStats(player: Player){
   //Stats Player
   const weapon: Item = dataFakeItemBase[player.equipment.idWeapon]
   const armor: Item = dataFakeItemBase[player.equipment.idArmor]
@@ -90,4 +88,6 @@ function updateStats(player: Player){
     damageShip: 0 + partOfRoom0.damage + partOfRoom1.damage + partOfRoom2.damage +partOfRoom3.damage +partOfRoom4.damage,
     defenseShip: 0 + partOfRoom0.defense + partOfRoom1.defense + partOfRoom2.defense +partOfRoom3.defense +partOfRoom4.defense,
   }
+
+  console.log(player.stats)
 }
