@@ -109,10 +109,10 @@ export async function getEndTurn(userId: number, actions: string[]) {
   }
 
   if(player.dungeonInfo.enemy.life > 0){
-    if(countOfDefenses >= 0){
+    if(countOfDefenses <= 0){
       player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
     }else{
-      countOfDefenses > 0? --countOfDefenses: countOfDefenses = 0
+      countOfDefenses > 0? countOfDefenses = countOfDefenses-player.dungeonInfo.enemy.baseAttack: countOfDefenses = 0
     }
 
     if(player.dungeonInfo.lifePlayer <= 0){
@@ -166,6 +166,6 @@ export async function getEndTurn(userId: number, actions: string[]) {
       newResourses: player.resourses
     }
   }
-  
+
   return enemyForPlayer;
 }
