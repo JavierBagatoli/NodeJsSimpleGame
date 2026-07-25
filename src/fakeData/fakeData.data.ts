@@ -20,6 +20,8 @@ export const playerMock: Player = {
     damage: 0,
     defense: 0,
     actions: 2,
+    damageShip: 0,
+    defenseShip: 0,
   },
   dungeonInfo:{
     level: 1,
