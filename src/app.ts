@@ -2,11 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 
-import capitalShipRoutes from "./modules/capitalShip/capitalShip.routes";
-import playerRoutes from "./modules/player/player.routes";
-import dungeonRoutes from "./modules/dungeon/dungeon.routes";
-import inventoryRoutes from "./modules/inventory/inventory.routes";
-import craftingRoutes from "./modules/crafting/crafting.routes";
+import capitalShipRoutes from "./modules/capitalShip/capitalShip.routes.ts";
+import playerRoutes from "./modules/player/player.routes.ts";
+import dungeonRoutes from "./modules/dungeon/dungeon.routes.ts";
+import inventoryRoutes from "./modules/inventory/inventory.routes.ts";
+import craftingRoutes from "./modules/crafting/crafting.routes.ts";
 
 dotenv.config();
 
