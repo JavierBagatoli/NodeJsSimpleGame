@@ -66,6 +66,7 @@ export interface InvetoryItemPlayer{
 export interface PlayerContext{
     id: string 
     name: string,
+    imgProfile: string,
     wallet: {
         credits: number
         platino: number
@@ -77,6 +78,11 @@ export interface PlayerContext{
         crystals: number
     }
     equipment: Equipment,
-    inventory:{},
+    inventory: InvetoryItemPlayer[],
     stats: PlayerStats,
+}
+
+export interface InvetoryItemPlayer{
+  id: number;
+  cantidad: number
 }

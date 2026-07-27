@@ -27,6 +27,7 @@ export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFi
     player = {
       id: player.id,
       name: player.username,
+      imgProfile: "0",
       wallet: {
           credits: player.dinero,
           platino: player.platino,
@@ -47,7 +48,7 @@ export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFi
         idRoom3: 0,
         idRoom4: 0,
       },
-      inventory: {},
+      inventory: [],
       stats: {
         damage: 0,
         defense: 0,
@@ -78,7 +79,6 @@ export async function refreshById(userId: string){
 }
 
 function createDataPlayer(doc: any): PlayerContext{
-  console.log(doc)
   return { 
       id: doc.id, 
       name: doc.data()?.name,
@@ -102,7 +102,8 @@ function createDataPlayer(doc: any): PlayerContext{
         idRoom3: 0,
         idRoom4: 0,
       },
-      inventory: {},
+      inventory: [],
+      imgProfile: "",
       stats: {
         damage: 0,
         defense: 0,

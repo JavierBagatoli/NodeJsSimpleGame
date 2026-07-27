@@ -4,6 +4,7 @@ import { ErrorFindData } from "./error.interface";
 import { i18n } from "../i18n/traslateMain.traslate";
 import { CapitalShip } from "../modules/capitalShip/capitalShip.interfaces";
 import { dataFakeCapitalShips } from "../fakeData/dataFakeCapitalShips.data";
+import { getAuth } from "firebase-admin/auth";
 
 export function findPlayer(userId: string): Player | ErrorFindData {
   const player = dataFakePlayers.find(
@@ -27,4 +28,10 @@ export function findCapitalShip(shipId: number): CapitalShip | ErrorFindData {
   }
 
   return CapitalShip
+}
+
+export async function getIdToken(req: any){
+  const token = (req.headers['authorization'] ?? "").split(" ")[1]
+  
+  return (await getAuth().verifyIdToken(token)).uid?? undefined;
 }

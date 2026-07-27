@@ -2,7 +2,8 @@ import { PlayerContext } from "./player.interfaces";
 
 export const NEW_PLAYER: PlayerContext ={ 
       id: "0", 
-      name: `${new Date()}`,
+      name: "No Name",
+      imgProfile: "0",
       wallet: {
         credits: 0,
         platino: 0,
@@ -23,7 +24,7 @@ export const NEW_PLAYER: PlayerContext ={
         idRoom3: 0,
         idRoom4: 0,
       },
-      inventory: {},
+      inventory: [],
       stats: {
         damage: 0,
         defense: 0,

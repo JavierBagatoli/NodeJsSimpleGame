@@ -7,6 +7,7 @@ import playerRoutes from "./modules/player/player.routes.ts";
 import dungeonRoutes from "./modules/dungeon/dungeon.routes.ts";
 import inventoryRoutes from "./modules/inventory/inventory.routes.ts";
 import craftingRoutes from "./modules/crafting/crafting.routes.ts";
+import profileRoutes from "./modules/profile/profile.routes.ts";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use("/api/player", playerRoutes);
 app.use("/api/dungeon", dungeonRoutes);
 app.use("/api/inventory", inventoryRoutes);
 app.use("/api/crafting", craftingRoutes);
+app.use("/api/profile", profileRoutes);
 
 const PORT = process.env.PORT || 3000;
 

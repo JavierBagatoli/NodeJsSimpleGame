@@ -1,12 +1,18 @@
 import { Router } from "express";
 import { getPlayer } from "../player/player.service";
 import { setInvetory, updateStats } from "./inventory.service";
-import { Player, PlayerContext } from "../player/player.interfaces";
+import { PlayerContext } from "../player/player.interfaces";
+import { getIdToken } from "../../globals/player.aux";
 
 const router = Router();
 
-router.get("/:id", async (req, res) => {
-  const playerId = req.params.id;
+router.get("/equipment", async (req, res) => {
+  const playerId = await getIdToken(req)
+  if (!playerId) {
+    return res.status(501).json({
+      error: "Acceso no autorizado"
+    });
+  }
 
   const player = await getPlayer(playerId);
 
@@ -19,11 +25,17 @@ router.get("/:id", async (req, res) => {
   res.json((player as PlayerContext).equipment );
 });
 
-router.get("/:id/inventory", async (req, res) => {
-  const playerId = req.params.id;
+
+
+router.get("/inventory", async (req, res) => {
+  const playerId = await getIdToken(req)
+  if (!playerId) {
+    return res.status(501).json({
+      error: "Acceso no autorizado"
+    });
+  }
 
   const player = await getPlayer(playerId);
-
   if (!player) {
     return res.status(404).json({
       error: "Jugador no encontrado"
@@ -33,8 +45,14 @@ router.get("/:id/inventory", async (req, res) => {
   res.json((player as PlayerContext).inventory);
 });
 
-router.get("/:id/set/:idSlot/:idInventory", async (req, res) => {
-  const playerId = req.params.id;
+router.get("/set/:idSlot/:idInventory", async (req, res) => {
+  const playerId = await getIdToken(req)
+  if (!playerId) {
+    return res.status(501).json({
+      error: "Acceso no autorizado"
+    });
+  }
+
   const idSlot = req.params.idSlot;
   const playerIdinventory = Number(req.params.idInventory);
 
@@ -56,3 +74,5 @@ router.get("/:id/set/:idSlot/:idInventory", async (req, res) => {
 });
 
 export default router;
+
+//TODO: Agregar visualizacion de equipo ajeno por medio de un header o algo asi los id se mantienen seguros.
