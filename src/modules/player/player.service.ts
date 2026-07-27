@@ -1,6 +1,7 @@
 import { dataFakePlayers } from "../../fakeData/fakeData.data";
 import { db } from "../../firebase";
 import { ErrorFindData } from "../../globals/error.interface";
+import { NEW_PLAYER } from "./player.constants";
 import { Player, PlayerContext } from "./player.interfaces";
 
 export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFindData> {
@@ -15,7 +16,7 @@ export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFi
     const doc = await userRef.get();
 
     if (!doc.exists) {
-      return { error: 'Usuario no encontrado' }
+      return createPlayer(userId)
     }
 
     return createDataPlayer(doc);
@@ -77,18 +78,19 @@ export async function refreshById(userId: string){
 }
 
 function createDataPlayer(doc: any): PlayerContext{
+  console.log(doc)
   return { 
       id: doc.id, 
       name: doc.data()?.name,
       wallet: {
-        credits: doc.data()?.credits,
-        platino: doc.data()?.platino,
+        credits: doc.data()?.credits ?? 0,
+        platino: doc.data()?.platino ?? 0,
       },
       resources:{
-        circuits: doc.data()?.circuits,
-        cores: doc.data()?.cores,
-        metals: doc.data()?.metals,
-        crystals: doc.data()?.crystals,
+        circuits: doc.data()?.circuits ?? 0,
+        cores: doc.data()?.cores ?? 0,
+        metals: doc.data()?.metals ?? 0,
+        crystals: doc.data()?.crystals ?? 0,
       },
       equipment:{
         idWeapon: 0,
@@ -110,6 +112,18 @@ function createDataPlayer(doc: any): PlayerContext{
         defenseShip: 0,
       }
     }
+}
+
+export async function createPlayer(userId: string): Promise<PlayerContext | ErrorFindData>{
+  let newPlayer: PlayerContext = NEW_PLAYER
+  newPlayer = {...newPlayer, id: userId}
+
+  let success: boolean = false;
+  let err: any = {error : "No se a creado aun"}
+  await db.collection("Player").doc(userId).set(newPlayer).then(_val => success)
+    .catch(error => err = {error: error})
+
+  return success? newPlayer: err
 }
 
 export async function getPlayerStats(userId: string) {
