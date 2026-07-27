@@ -2,13 +2,20 @@ import { Router } from "express";
 import { getCreateEnemy, getListOfDungeonsAvalibles, getEndTurn } from "./dungeon.service";
 import { ErrorFindData } from "../../globals/error.interface";
 import { verifyFirebaseToken } from "../auth/auth.midlleware";
+import { getAuth } from "firebase-admin/auth";
 
 const router = Router();
 
 router.post("/list-dungeons",verifyFirebaseToken, async (req, res ) => {
-  const { idUser } = req?.body;
+  const token = (req.headers['authorization'] ?? "").split(" ")[1]
+  
+  const decodedToken = await getAuth().verifyIdToken(token);
 
-  const list : number[] | ErrorFindData = await getListOfDungeonsAvalibles(idUser);
+  if(!token){return res.status(505).json({
+    error: "Error auth"
+  })}
+
+  const list : number[] | ErrorFindData = await getListOfDungeonsAvalibles(decodedToken.uid);
 
   if (!list || "error" in list) {
     return res.status(404).json({
