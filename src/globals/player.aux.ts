@@ -5,7 +5,7 @@ import { i18n } from "../i18n/traslateMain.traslate";
 import { CapitalShip } from "../modules/capitalShip/capitalShip.interfaces";
 import { dataFakeCapitalShips } from "../fakeData/dataFakeCapitalShips.data";
 
-export function findPlayer(userId: number): Player | ErrorFindData {
+export function findPlayer(userId: string): Player | ErrorFindData {
   const player = dataFakePlayers.find(
     (p) => p.id === userId
   );

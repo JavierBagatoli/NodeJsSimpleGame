@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
     });
   }
 
-  res.json(player);
+  res.json(player); // TODO: hay que recortar el objeto
 });
 
 router.get("/refresh", async (req, res) => {

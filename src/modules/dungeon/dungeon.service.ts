@@ -3,7 +3,7 @@ import { ErrorFindData } from "../../globals/error.interface";
 import { findCapitalShip, findPlayer } from "../../globals/player.aux";
 import { EnemyStatscontrol } from "./dungeon.interfaces";
 
-export async function getListOfDungeonsAvalibles(userId: number) {
+export async function getListOfDungeonsAvalibles(userId: string) {
   const player = findPlayer(userId)
   if(!player || 'error' in player) return player
 
@@ -13,7 +13,7 @@ export async function getListOfDungeonsAvalibles(userId: number) {
   return ship.dungeonAvalibles;
 }
 
-export async function getCreateEnemy(userId: number, level: number):Promise<EnemyStatscontrol | ErrorFindData> {
+export async function getCreateEnemy(userId: string, level: number):Promise<EnemyStatscontrol | ErrorFindData> {
   let player = findPlayer(userId)
 
   if(!player || "error" in player) return player
@@ -48,7 +48,7 @@ export async function getCreateEnemy(userId: number, level: number):Promise<Enem
   return enemy;
 }
 
-export async function getEndTurn(userId: number, actions: string[]) {
+export async function getEndTurn(userId: string, actions: string[]) {
   const todayDate = new Date();
   const shortFormDate = `${todayDate.getDate()}-${todayDate.getMonth()+1}`
 

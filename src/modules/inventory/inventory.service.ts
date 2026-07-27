@@ -1,6 +1,6 @@
 import { dataFakeItemBase, Item } from "../../fakeData/fakeBiblioteca.data";
 import { findPlayer } from "../../globals/player.aux";
-import { Player } from "../player/player.interfaces";
+import { Player, PlayerContext } from "../player/player.interfaces";
 
 /**
  * 
@@ -9,7 +9,7 @@ import { Player } from "../player/player.interfaces";
  * @param idItem 
  * @returns 
  */
-export async function setInvetory(userId: number, idSlot: string, idItem: number) {
+export async function setInvetory(userId: string, idSlot: string, idItem: number) {
   let player = findPlayer(userId)
   if("error" in player) return player;
 
@@ -66,7 +66,7 @@ function errorItem(){
   return {error: 'El objeto no es compatible con el ranura'}
 }
 
-export function updateStats(player: Player){
+export function updateStats(player: PlayerContext){
   //Stats Player
   const weapon: Item = dataFakeItemBase[player.equipment.idWeapon]
   const armor: Item = dataFakeItemBase[player.equipment.idArmor]
@@ -88,6 +88,4 @@ export function updateStats(player: Player){
     damageShip: 0 + partOfRoom0.damage + partOfRoom1.damage + partOfRoom2.damage +partOfRoom3.damage +partOfRoom4.damage,
     defenseShip: 0 + partOfRoom0.defense + partOfRoom1.defense + partOfRoom2.defense +partOfRoom3.defense +partOfRoom4.defense,
   }
-
-  console.log(player.stats)
 }

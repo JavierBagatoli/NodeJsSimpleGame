@@ -8,7 +8,7 @@ export interface Player {
   platino: number,
   potions: PlayerPotions,
   resourses: PlayerResourses,
-  stats: PlayerStats
+  stats: PlayerStats,
   dungeonInfo: DungeonInfoPlayer,
   invetory: InvetoryItemPlayer[],
   equipment: Equipment,
@@ -61,4 +61,22 @@ export interface Equipment{
 export interface InvetoryItemPlayer{
   id: number;
   cantidad: number
+}
+
+export interface PlayerContext{
+    id: string 
+    name: string,
+    wallet: {
+        credits: number
+        platino: number
+    },
+    resources:{
+        circuits: number
+        cores: number
+        metals: number
+        crystals: number
+    }
+    equipment: Equipment,
+    inventory:{},
+    stats: PlayerStats,
 }

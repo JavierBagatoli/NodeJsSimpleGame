@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { getPlayer } from "../player/player.service";
 import { setInvetory, updateStats } from "./inventory.service";
+import { Player, PlayerContext } from "../player/player.interfaces";
 
 const router = Router();
 
 router.get("/:id", async (req, res) => {
-  const playerId = Number(req.params.id);
+  const playerId = req.params.id;
 
   const player = await getPlayer(playerId);
 
@@ -15,11 +16,11 @@ router.get("/:id", async (req, res) => {
     });
   }
 
-  res.json(player.equipment);
+  res.json((player as PlayerContext).equipment );
 });
 
 router.get("/:id/inventory", async (req, res) => {
-  const playerId = Number(req.params.id);
+  const playerId = req.params.id;
 
   const player = await getPlayer(playerId);
 
@@ -29,11 +30,11 @@ router.get("/:id/inventory", async (req, res) => {
     });
   }
 
-  res.json(player.invetory);
+  res.json((player as PlayerContext).inventory);
 });
 
 router.get("/:id/set/:idSlot/:idInventory", async (req, res) => {
-  const playerId = Number(req.params.id);
+  const playerId = req.params.id;
   const idSlot = req.params.idSlot;
   const playerIdinventory = Number(req.params.idInventory);
 
@@ -49,7 +50,7 @@ router.get("/:id/set/:idSlot/:idInventory", async (req, res) => {
   if (!changes || "error" in changes) {
     return res.status(404).json(changes);
   }
-  updateStats(player)
+  updateStats(player as PlayerContext)
   
   res.json(changes);
 });
