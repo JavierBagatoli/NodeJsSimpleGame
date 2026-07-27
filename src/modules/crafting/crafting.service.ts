@@ -1,7 +1,7 @@
 import { dataFakeItemBase } from "../../fakeData/fakeBiblioteca.data";
 import { findPlayer } from "../../globals/player.aux";
 
-export const tryBuyItemForPlayer = (userId: number, itemId: number) => {
+export const tryBuyItemForPlayer = (userId: string, itemId: number) => {
   let player = findPlayer(userId)
   if("error" in player) return player;
 

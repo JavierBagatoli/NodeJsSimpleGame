@@ -21,7 +21,7 @@ router.get("/:id/move/:idZone", async (req, res) => {
   const capitalShipId = Number(req.params.id);
   const idZone = Number(req.params.idZone);
 
-  const capitalShip = await changeCapitalShip(1,capitalShipId, idZone);
+  const capitalShip = await changeCapitalShip("1",capitalShipId, idZone);
 
   if (!capitalShip) {
     return res.status(404).json({

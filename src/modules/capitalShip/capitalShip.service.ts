@@ -64,7 +64,7 @@ export async function postMoveCapitalShip(userId: number) {
  * @param zona 
  * @returns 
  */
-export async function changeCapitalShip(userId: number, capitalShipId: number, zona: number) {
+export async function changeCapitalShip(userId: string, capitalShipId: number, zona: number) {
   const player =  findPlayer(userId)
   if("error" in player) return player
 
