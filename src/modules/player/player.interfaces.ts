@@ -1,7 +1,7 @@
 import { EnemyStatscontrol } from "../dungeon/dungeon.interfaces"
 
 export interface Player {
-  id: number,
+  id: string,
   username: string,
   capitalShipId: number,
   dinero: number,

@@ -14,6 +14,10 @@ const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use((_req, res, next) => {
+  res.setHeader('Cross-Origin-Opener-Policy', 'same-origin-allow-popups');
+  next();
+});
 
 app.get("/", (_req, res) => {
   res.json({

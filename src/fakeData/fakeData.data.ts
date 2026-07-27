@@ -1,7 +1,7 @@
 import { Player } from "../modules/player/player.interfaces";
 
 export const playerMock: Player = {
-  id: 1,
+  id: "1",
   username: "Jab",
   capitalShipId: 0,
   dinero: 124,
