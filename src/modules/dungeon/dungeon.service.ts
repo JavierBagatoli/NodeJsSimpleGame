@@ -147,11 +147,11 @@ export async function getEndTurn(userId: string, actions: string[]) {
     if(typeResource === 0){
       player.resources.circuits = player.resources.circuits+1
     }else if(typeResource === 1){
-      player.resources.cores = player.resources.cores+1
+      player.resources.metals = player.resources.metals+1
     }else if(typeResource === 2){
       player.resources.cristals = player.resources.cristals+1
     }else if(typeResource === 3){
-      player.resources.metals = player.resources.metals+1
+      player.resources.cores = player.resources.cores+1
     }
 
     enemyForPlayer = undefined
@@ -163,15 +163,17 @@ export async function getEndTurn(userId: string, actions: string[]) {
 
     //update Inventario
     const suerte: number = 1
-    const drop = Math.random()* 100 < 10*suerte
+    const drop = Math.random()* 100 < 30*suerte
 
     if(drop){
-      switch (player.dungeonInfo.level % 4) {
+      const getItem: number = 0 % 4
+      console.log(getItem)
+      switch (getItem) {
         case 0:
           player.resources.metals = ++player.resources.metals
           break;
         case 1:
-          player.resources.cristals = ++player.resources.cristals
+          player.resources.crystals = ++player.resources.crystals
           break;
         case 2:
           player.resources.circuits = ++player.resources.circuits
@@ -180,12 +182,11 @@ export async function getEndTurn(userId: string, actions: string[]) {
           player.resources.cores = ++player.resources.cores
           break;
       }
+      addResources= true;
+      userRef.update({...player,
+        resources: player.resources
+      })    
     }
-    
-    addResources= true;
-    userRef.update({...player,
-      resources: player.resources
-    })    
   }
   
   await userRefEnemy.update(finalEnemy)
