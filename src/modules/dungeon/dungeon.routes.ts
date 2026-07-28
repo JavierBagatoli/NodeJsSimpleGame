@@ -2,20 +2,19 @@ import { Router } from "express";
 import { getCreateEnemy, getListOfDungeonsAvalibles, getEndTurn } from "./dungeon.service";
 import { ErrorFindData } from "../../globals/error.interface";
 import { verifyFirebaseToken } from "../auth/auth.midlleware";
-import { getAuth } from "firebase-admin/auth";
+import { getIdToken } from "../../globals/player.aux";
 
 const router = Router();
 
-router.post("/list-dungeons",verifyFirebaseToken, async (req, res ) => {
-  const token = (req.headers['authorization'] ?? "").split(" ")[1]
-  
-  const decodedToken = await getAuth().verifyIdToken(token);
+router.get("/list-dungeons",verifyFirebaseToken, async (req, res ) => {
+  const playerId = await getIdToken(req)
+  if (!playerId) {
+    return res.status(501).json({
+      error: "Acceso no autorizado"
+    });
+  }
 
-  if(!token){return res.status(505).json({
-    error: "Error auth"
-  })}
-
-  const list : number[] | ErrorFindData = await getListOfDungeonsAvalibles(decodedToken.uid);
+  const list : number[] | ErrorFindData = await getListOfDungeonsAvalibles(playerId);
 
   if (!list || "error" in list) {
     return res.status(404).json({
@@ -27,15 +26,28 @@ router.post("/list-dungeons",verifyFirebaseToken, async (req, res ) => {
 });
 
 router.post("/create-monster", async (req, res ) => {
-  const { idUser, level } = req.body;
-  const monster = await getCreateEnemy(idUser, level);
+  const playerId = await getIdToken(req)
+  if (!playerId) {
+    return res.status(501).json({
+      error: "Acceso no autorizado"
+    });
+  }
+
+  const { level } = req.body;
+  const monster = await getCreateEnemy(playerId, level);
   res.json(monster);
 });
 
 router.post("/end-turn", async (req, res ) => {
-  const { idUser, actions } = req.body;
+  const playerId = await getIdToken(req)
+  if (!playerId) {
+    return res.status(501).json({
+      error: "Acceso no autorizado"
+    });
+  }
+  const { actions } = req.body;
 
-  const list = await getEndTurn(idUser, actions);
+  const list = await getEndTurn(playerId, actions);
 
   if (!list) {
     return res.status(404).json({
@@ -49,17 +61,17 @@ router.post("/end-turn", async (req, res ) => {
     return res.status(404).json({
       error: "Sin enemigo"
     });
-  }else if(list === 3){
+  }/*else if(list === 3){
     return res.status(404).json({
       error: "Has Muerto"
     });
-  }else if(list === 4){
-    return res.status(404).json({
-      error: "Solo puede jugar una dungeon al dia"
-    });
-  }
+  }//else if(list === 4){
+  //  return res.status(404).json({
+  //    error: "Solo puede jugar una dungeon al dia"
+  //  });
+  //}
 
-
+*/
   res.json(list);
 });
 

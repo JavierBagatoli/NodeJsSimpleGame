@@ -7,7 +7,7 @@ export interface Player {
   dinero: number,
   platino: number,
   potions: PlayerPotions,
-  resourses: PlayerResourses,
+  resources: PlayerResourses,
   stats: PlayerStats,
   dungeonInfo: DungeonInfoPlayer,
   invetory: InvetoryItemPlayer[],

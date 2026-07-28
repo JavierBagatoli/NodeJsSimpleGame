@@ -10,7 +10,7 @@ export const playerMock: Player = {
     speed: 2,
     damage: 1,
   },
-  resourses:{
+  resources:{
     circuits: 23,
     cores: 44,
     metals: 55,

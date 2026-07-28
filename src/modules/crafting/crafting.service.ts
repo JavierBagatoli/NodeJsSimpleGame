@@ -9,14 +9,14 @@ export const tryBuyItemForPlayer = (userId: string, itemId: number) => {
   if(!itemSelected){return {error: 'El item no existe'}}
 
 
-  const difCircuitos = (player.resourses.circuits - (itemSelected.coste.circuito ?? 0))
-  const difMetal = (player.resourses.metals - (itemSelected.coste.metal ?? 0))
-  const difCore = (player.resourses.cores - (itemSelected.coste.nucleo ?? 0))
-  const difCristals = (player.resourses.cristals - (itemSelected.coste.cristal ?? 0))
+  const difCircuitos = (player.resources.circuits - (itemSelected.coste.circuito ?? 0))
+  const difMetal = (player.resources.metals - (itemSelected.coste.metal ?? 0))
+  const difCore = (player.resources.cores - (itemSelected.coste.nucleo ?? 0))
+  const difCristals = (player.resources.cristals - (itemSelected.coste.cristal ?? 0))
 
   if(!(difCircuitos >= 0) || !(difMetal >= 0)  || !(difCore >= 0)  || !(difCristals >= 0) ) return {error: "No dispone de recursos suficientes"}
 
-  player.resourses = {
+  player.resources = {
     circuits: difCircuitos,
     metals: difMetal,
     cores: difCore,

@@ -33,10 +33,10 @@ export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFi
           platino: player.platino,
       },
       resources:{
-          circuits: player.resourses.circuits,
-          cores: player.resourses.cores,
-          metals: player.resourses.metals,
-          crystals: player.resourses.cristals,
+          circuits: player.resources.circuits,
+          cores: player.resources.cores,
+          metals: player.resources.metals,
+          crystals: player.resources.cristals,
       },
       equipment:{
         idWeapon: 0,

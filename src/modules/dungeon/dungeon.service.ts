@@ -1,26 +1,27 @@
 import { dataFakeItemBase } from "../../fakeData/fakeBiblioteca.data";
+import { db } from "../../firebase";
 import { ErrorFindData } from "../../globals/error.interface";
 import { findCapitalShip, findPlayer } from "../../globals/player.aux";
 import { EnemyStatscontrol } from "./dungeon.interfaces";
 
 export async function getListOfDungeonsAvalibles(userId: string) {
-  const player = findPlayer(userId)
-  if(!player || 'error' in player) return player
-
-  const ship = findCapitalShip(player.capitalShipId)
-  if(!ship || 'error' in ship) return ship
-
-  return ship.dungeonAvalibles;
+  //const player = findPlayer(userId)
+  //if(!player || 'error' in player) return player
+//
+  //const ship = findCapitalShip(player.capitalShipId)
+  //if(!ship || 'error' in ship) return ship
+//
+  return [1,2,3,4]//ship.dungeonAvalibles;
 }
 
 export async function getCreateEnemy(userId: string, level: number):Promise<EnemyStatscontrol | ErrorFindData> {
-  let player = findPlayer(userId)
-
-  if(!player || "error" in player) return player
+  //let player = findPlayer(userId)
+  //if(!player || "error" in player) return player
 
   const expectedLife = Math.round(Math.random()*10*(level+1))
 
   const enemy: EnemyStatscontrol = {
+    id: userId,
     idTypeImage: Math.floor(Math.random()*5),
     dificultad: level+1,
     life: expectedLife,
@@ -43,7 +44,16 @@ export async function getCreateEnemy(userId: string, level: number):Promise<Enem
     }
   }
 
-  player.dungeonInfo.enemy = enemy
+  try{
+    const userRef = db.collection('Enemy').doc(userId);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      await userRef.create(enemy)
+    }else{
+      await userRef.update(enemy)
+    }
+  }catch(err){}
 
   return enemy;
 }
@@ -52,11 +62,18 @@ export async function getEndTurn(userId: string, actions: string[]) {
   const todayDate = new Date();
   const shortFormDate = `${todayDate.getDate()}-${todayDate.getMonth()+1}`
 
-  let player = findPlayer(userId)
+  //let player = findPlayer(userId)
 
-  if(!player || 'error' in player) return
+  //if(!player || 'error' in player) return
 
-  if(player.dungeonInfo.lastDeathOnDungeon === shortFormDate) return 4
+  //if(player.dungeonInfo.lastDeathOnDungeon === shortFormDate) return 4
+
+  const userRef = db.collection('Player').doc(userId);
+  const docPlayer = await userRef.get();
+
+  if(!docPlayer || 'error' in docPlayer) return
+
+  let player = docPlayer.data()!
 
   let countOfAttacks: number = 0
   let countOfDefenses: number = player.stats.defense
@@ -71,7 +88,10 @@ export async function getEndTurn(userId: string, actions: string[]) {
     }
   })
 
-  let enemyForPlayer = player.dungeonInfo.enemy
+  const userRefEnemy = db.collection('Enemy').doc(userId);
+  const docEnemy = await userRefEnemy.get();
+
+  let enemyForPlayer = docEnemy.data()
   if(!enemyForPlayer) return 2
 
   let slownessDamage = enemyForPlayer.debuf.slowness > 0 ? enemyForPlayer.debuf.slowness -1: 0;
@@ -97,7 +117,7 @@ export async function getEndTurn(userId: string, actions: string[]) {
     })
   }  
 
-  player.dungeonInfo.enemy = {
+  let finalEnemy =  {
     ...enemyForPlayer,
     life: enemyForPlayer.life -player.stats.damage*countOfAttacks,
     debuf:{
@@ -108,37 +128,37 @@ export async function getEndTurn(userId: string, actions: string[]) {
     }
   }
 
-  if(player.dungeonInfo.enemy.life > 0){
+  if(finalEnemy.life > 0){
     if(countOfDefenses <= 0){
-      player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
+      //player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
     }else{
-      countOfDefenses > 0? countOfDefenses = countOfDefenses-player.dungeonInfo.enemy.baseAttack: countOfDefenses = 0
+      countOfDefenses > 0? countOfDefenses = countOfDefenses-enemyForPlayer.baseAttack: countOfDefenses = 0
     }
 
-    if(player.dungeonInfo.lifePlayer <= 0){
-      player.dungeonInfo.enemy = null
-      player.dungeonInfo.lastDeathOnDungeon = shortFormDate
-      return 3
-    }
+    //if(player.dungeonInfo.lifePlayer <= 0){
+      //player.dungeonInfo.lastDeathOnDungeon = shortFormDate
+    //  return 3
+    //}
   }
 
-  if(player.dungeonInfo.enemy.life <= 0){
-    const typeResource = player.dungeonInfo.enemy.dificultad % 4
+  let addResources: boolean = false;
+  if(finalEnemy.life <= 0){
+    const typeResource = enemyForPlayer.dificultad % 4
     if(typeResource === 0){
-      player.resourses.circuits = player.resourses.circuits+1
+      player.resources.circuits = player.resources.circuits+1
     }else if(typeResource === 1){
-      player.resourses.cores = player.resourses.cores+1
+      player.resources.cores = player.resources.cores+1
     }else if(typeResource === 2){
-    player.resourses.cristals = player.resourses.cristals+1
+      player.resources.cristals = player.resources.cristals+1
     }else if(typeResource === 3){
-      player.resourses.metals = player.resourses.metals+1
+      player.resources.metals = player.resources.metals+1
     }
 
-    player.dungeonInfo.enemy = null
-    const newEnemy = await getCreateEnemy(userId, player.dungeonInfo.level)?? null
+    enemyForPlayer = undefined
+    const newEnemy = await getCreateEnemy(userId, 0 /*player.dungeonInfo.level*/)?? null
 
     if("life" in newEnemy){
-      player.dungeonInfo.enemy = newEnemy;
+      finalEnemy = newEnemy;
     }
 
     //update Inventario
@@ -148,24 +168,29 @@ export async function getEndTurn(userId: string, actions: string[]) {
     if(drop){
       switch (player.dungeonInfo.level % 4) {
         case 0:
-          player.resourses.metals = ++player.resourses.metals
+          player.resources.metals = ++player.resources.metals
           break;
         case 1:
-          player.resourses.cristals = ++player.resourses.cristals
+          player.resources.cristals = ++player.resources.cristals
           break;
         case 2:
-          player.resourses.circuits = ++player.resourses.circuits
+          player.resources.circuits = ++player.resources.circuits
           break;
         case 3:
-          player.resourses.cores = ++player.resourses.cores
+          player.resources.cores = ++player.resources.cores
           break;
       }
     }
-    enemyForPlayer = {
-      ...enemyForPlayer,
-      newResourses: player.resourses
-    }
+    
+    addResources= true;
+    userRef.update({...player,
+      resources: player.resources
+    })    
   }
-
-  return enemyForPlayer;
+  
+  await userRefEnemy.update(finalEnemy)
+  return addResources? {
+    ...finalEnemy,
+    resources: player.resources,
+  }: finalEnemy;
 }

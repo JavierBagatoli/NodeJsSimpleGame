@@ -15,6 +15,7 @@ export default interface StatsControl{
 }
 
 export interface EnemyStatscontrol extends StatsControl{
+    id: string,
     idTypeImage: number,
     dificultad: number,
     debuf: {
