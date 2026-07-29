@@ -1,6 +1,13 @@
 import { dataFakeItemBase, Item } from "../../fakeData/fakeBiblioteca.data";
 import { findPlayer } from "../../globals/player.aux";
-import { Player, PlayerContext } from "../player/player.interfaces";
+import { PlayerContext } from "../player/player.interfaces";
+
+export async function getInventario(userId: string) {
+  let player = await findPlayer(userId)
+  if("error" in player) return player;
+
+  return player.inventory
+}
 
 /**
  * 
@@ -10,10 +17,10 @@ import { Player, PlayerContext } from "../player/player.interfaces";
  * @returns 
  */
 export async function setInvetory(userId: string, idSlot: string, idItem: number) {
-  let player = findPlayer(userId)
+  let player = await findPlayer(userId)
   if("error" in player) return player;
 
-  if(!player.invetory.find(item => item.id === idItem)) return {error: `El usuario no dispone del item ${idItem}`}
+  if(!player.inventory.find(item => item.id === idItem)) return {error: `El usuario no dispone del item ${idItem}`}
 
   if(!dataFakeItemBase[idItem]) return
   switch (idSlot.split("-")[1]) {

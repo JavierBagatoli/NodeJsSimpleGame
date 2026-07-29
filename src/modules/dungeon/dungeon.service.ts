@@ -149,7 +149,7 @@ export async function getEndTurn(userId: string, actions: string[]) {
     }else if(typeResource === 1){
       player.resources.metals = player.resources.metals+1
     }else if(typeResource === 2){
-      player.resources.cristals = player.resources.cristals+1
+      player.resources.crystals = player.resources.crystals+1
     }else if(typeResource === 3){
       player.resources.cores = player.resources.cores+1
     }

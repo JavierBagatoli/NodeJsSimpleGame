@@ -36,7 +36,7 @@ export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFi
           circuits: player.resources.circuits,
           cores: player.resources.cores,
           metals: player.resources.metals,
-          crystals: player.resources.cristals,
+          crystals: player.resources.crystals,
       },
       equipment:{
         idWeapon: 0,
@@ -48,7 +48,7 @@ export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFi
         idRoom3: 0,
         idRoom4: 0,
       },
-      inventory: [],
+      inventory: player.inventory,
       stats: {
         damage: 0,
         defense: 0,
@@ -102,7 +102,7 @@ function createDataPlayer(doc: any): PlayerContext{
         idRoom3: doc.data()?.equipment.idRoom3 ?? 0,
         idRoom4: doc.data()?.equipment.idRoom4 ?? 0,
       },
-      inventory: [],
+      inventory: doc.data()?.inventory ?? [],
       imgProfile: doc.data()?.imgProfile ?? "",
       stats: {
         damage: doc.data()?.stats.damage ?? 0,

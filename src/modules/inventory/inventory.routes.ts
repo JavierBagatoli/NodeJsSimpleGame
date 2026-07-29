@@ -36,13 +36,13 @@ router.get("/inventory", async (req, res) => {
   }
 
   const player = await getPlayer(playerId);
-  if (!player) {
+  if (!player || "error" in player) {
     return res.status(404).json({
       error: "Jugador no encontrado"
     });
   }
-
-  res.json((player as PlayerContext).inventory);
+  console.log(player)
+  res.json((player).inventory);
 });
 
 router.get("/set/:idSlot/:idInventory", async (req, res) => {

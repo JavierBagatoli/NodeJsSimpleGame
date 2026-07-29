@@ -14,7 +14,7 @@ export const playerMock: Player = {
     circuits: 23,
     cores: 44,
     metals: 55,
-    cristals: 32,
+    crystals: 32,
   },
   stats:{
     damage: 0,
@@ -30,7 +30,7 @@ export const playerMock: Player = {
     enemy: null,
     lastDeathOnDungeon: null
   },
-  invetory: [{
+  inventory: [{
     id:1,
     cantidad:10
   },{

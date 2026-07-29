@@ -10,7 +10,7 @@ export interface Player {
   resources: PlayerResourses,
   stats: PlayerStats,
   dungeonInfo: DungeonInfoPlayer,
-  invetory: InvetoryItemPlayer[],
+  inventory: InvetoryItemPlayer[],
   equipment: Equipment,
 }
 
@@ -27,7 +27,7 @@ export interface PlayerResourses{
     circuits: number,
     cores: number,
     metals: number,
-    cristals: number,
+    crystals: number,
 }
 
 export interface PlayerPotions{

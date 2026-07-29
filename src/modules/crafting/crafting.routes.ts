@@ -2,6 +2,7 @@ import { Router } from "express";
 import { dataFakeItemBase } from "../../fakeData/fakeBiblioteca.data";
 import { itemToSell } from "./crafting.interfaces";
 import { tryBuyItemForPlayer } from "./crafting.service";
+import { getIdToken } from "../../globals/player.aux";
 
 const router = Router();
 
@@ -19,9 +20,16 @@ router.get("/costs", async (_req, res) => {
 });
 
 router.post("/buy", async (req, res) => {
-  const {idUser, idItem} = req.body
+  const playerId = await getIdToken(req)
+  if (!playerId) {
+    return res.status(501).json({
+      error: "Acceso no autorizado"
+    });
+  }
 
-  const buyStatus = tryBuyItemForPlayer(idUser, idItem)
+  const { idItem} = req.body
+
+  const buyStatus = tryBuyItemForPlayer(playerId, idItem)
   
   if(!buyStatus || "error" in buyStatus){
     return res.status(404).json({
