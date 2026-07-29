@@ -65,7 +65,7 @@ export async function postMoveCapitalShip(userId: number) {
  * @returns 
  */
 export async function changeCapitalShip(userId: string, capitalShipId: number, zona: number) {
-  const player =  findPlayer(userId)
+  const player = await findPlayer(userId)
   if("error" in player) return player
 
   const capitalShip = findCapitalShip(capitalShipId)
