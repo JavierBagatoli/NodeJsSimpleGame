@@ -50,9 +50,9 @@ export async function getPlayer(userId: string): Promise<PlayerContext | ErrorFi
       },
       inventory: player.inventory,
       stats: {
-        damage: 0,
+        damage: 1,
         defense: 0,
-        actions: 0,
+        actions: 2,
 
         damageShip: 0,
         defenseShip: 0,
