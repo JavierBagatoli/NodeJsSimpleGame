@@ -41,7 +41,7 @@ router.get("/inventory", async (req, res) => {
       error: "Jugador no encontrado"
     });
   }
-  console.log(player)
+
   res.json((player).inventory);
 });
 
@@ -53,6 +53,7 @@ router.get("/set/:idSlot/:idInventory", async (req, res) => {
     });
   }
 
+  console.log(">>>")
   const idSlot = req.params.idSlot;
   const playerIdinventory = Number(req.params.idInventory);
 
@@ -68,7 +69,6 @@ router.get("/set/:idSlot/:idInventory", async (req, res) => {
   if (!changes || "error" in changes) {
     return res.status(404).json(changes);
   }
-  updateStats(player as PlayerContext)
   
   res.json(changes);
 });

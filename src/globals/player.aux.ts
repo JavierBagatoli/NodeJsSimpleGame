@@ -33,7 +33,6 @@ export async function findPlayer(userId: string): Promise<Player | ErrorFindData
 }
 
 function adapterBasaDateToPlayer(data: any):Player{
-  console.log(">",data.invetory)
   return {
     id: data.id,
     username: data.name,

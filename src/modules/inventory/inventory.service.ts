@@ -1,4 +1,5 @@
 import { dataFakeItemBase, Item } from "../../fakeData/fakeBiblioteca.data";
+import { db } from "../../firebase";
 import { findPlayer } from "../../globals/player.aux";
 import { PlayerContext } from "../player/player.interfaces";
 
@@ -9,6 +10,7 @@ export async function getInventario(userId: string) {
   return player.inventory
 }
 
+const ROOMS = ['room0','room1','room2','room3','room4',]
 /**
  * 
  * @param userId 
@@ -21,34 +23,31 @@ export async function setInvetory(userId: string, idSlot: string, idItem: number
   if("error" in player) return player;
 
   if(!player.inventory.find(item => item.id === idItem)) return {error: `El usuario no dispone del item ${idItem}`}
+  let response : { error: string } | { success: string } = errorItem()
 
   if(!dataFakeItemBase[idItem]) return
-  switch (idSlot.split("-")[1]) {
-    case 'weapon':
-      if(dataFakeItemBase[idItem].type !== 'weapon'){
-        return errorItem()
-      }
-      player.equipment.idWeapon = idItem;
-      return {success: 'Equipamiento actualizado'};
-    case 'armor':
-      if(dataFakeItemBase[idItem].type !== 'armor'){
-        return errorItem()
-      }
-      player.equipment.idArmor = idItem;
-      return {success: 'Equipamiento actualizado'};
-    case 'shield':
-      if(dataFakeItemBase[idItem].type !== 'shield'){
-        return errorItem()
-      }
-      player.equipment.idShield = idItem;
-      return {success: 'Equipamiento actualizado'};
-    case 'room0':
-    case 'room1':
-    case 'room2':
-    case 'room3':
-    case 'room4':
-      if(dataFakeItemBase[idItem].type !== 'room'){
-        return errorItem()
+  let option: string = idSlot.split("-")[1];
+  if(option === 'weapon'){
+    if(dataFakeItemBase[idItem].type !== 'weapon'){
+      response = errorItem();
+    }
+    player.equipment.idWeapon = idItem;
+    response = successItem();
+  }else if(option === 'armor'){
+    if(dataFakeItemBase[idItem].type !== 'armor'){
+      response =  errorItem();
+    }
+    player.equipment.idArmor = idItem;
+    response = successItem();
+  }else if(option === 'shield'){
+    if(dataFakeItemBase[idItem].type !== 'shield'){
+      response =  errorItem();
+    }
+    player.equipment.idShield = idItem;
+    response = successItem();
+  }else if(ROOMS.includes(option)){
+     if(dataFakeItemBase[idItem].type !== 'room'){
+        response =  errorItem();
       }
 
       if(idSlot === 'room0'){
@@ -62,30 +61,42 @@ export async function setInvetory(userId: string, idSlot: string, idItem: number
       }else if(idSlot === 'room4'){
         player.equipment.idRoom4 = idItem;
       }
-      return {success: 'Equipamiento actualizado'};
-  
-    default:
-      return errorItem()
   }
+
+  updateStats(player)
+
+  console.log(player)
+  
+  const userRef = db.collection('Player').doc(userId);
+  const doc = await userRef.get();
+  
+  userRef.update({
+    ...doc.data(),
+    equipment: player.equipment,
+    stats: player.stats
+  })
 }
 
 function errorItem(){
   return {error: 'El objeto no es compatible con el ranura'}
 }
 
-export function updateStats(player: PlayerContext){
+function successItem(){
+  return {success: 'Equipamiento actualizado'};
+}
+
+export function updateStats(player: any){
   //Stats Player
-  const weapon: Item = dataFakeItemBase[player.equipment.idWeapon]
-  const armor: Item = dataFakeItemBase[player.equipment.idArmor]
-  const shield: Item = dataFakeItemBase[player.equipment.idShield]
+  const weapon: Item = dataFakeItemBase[player.equipment.idWeapon];
+  const armor: Item = dataFakeItemBase[player.equipment.idArmor];
+  const shield: Item = dataFakeItemBase[player.equipment.idShield];
 
   //Ship
-  const partOfRoom0: Item = dataFakeItemBase[player.equipment.idRoom0]
-  const partOfRoom1: Item = dataFakeItemBase[player.equipment.idRoom1]
-  const partOfRoom2: Item = dataFakeItemBase[player.equipment.idRoom2]
-  const partOfRoom3: Item = dataFakeItemBase[player.equipment.idRoom3]
-  const partOfRoom4: Item = dataFakeItemBase[player.equipment.idRoom4]
-
+  const partOfRoom0: Item = dataFakeItemBase[player.equipment.idRoom0];
+  const partOfRoom1: Item = dataFakeItemBase[player.equipment.idRoom1];
+  const partOfRoom2: Item = dataFakeItemBase[player.equipment.idRoom2];
+  const partOfRoom3: Item = dataFakeItemBase[player.equipment.idRoom3];
+  const partOfRoom4: Item = dataFakeItemBase[player.equipment.idRoom4];
 
   player.stats = {
     damage: weapon.damage + armor.damage + shield.damage,
@@ -94,5 +105,5 @@ export function updateStats(player: PlayerContext){
   
     damageShip: 0 + partOfRoom0.damage + partOfRoom1.damage + partOfRoom2.damage +partOfRoom3.damage +partOfRoom4.damage,
     defenseShip: 0 + partOfRoom0.defense + partOfRoom1.defense + partOfRoom2.defense +partOfRoom3.defense +partOfRoom4.defense,
-  }
+  };
 }

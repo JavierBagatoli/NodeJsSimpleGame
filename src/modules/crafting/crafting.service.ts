@@ -25,11 +25,7 @@ export const tryBuyItemForPlayer = async (userId: string, itemId: number) => {
     crystals: difCrystals,
   }
 
-  console.log(player.inventory)
-
   const postItem = player.inventory.findIndex(item => item.id === itemId)
-
-  console.log(postItem)
 
   let response = {}
 
@@ -50,7 +46,6 @@ export const tryBuyItemForPlayer = async (userId: string, itemId: number) => {
     }
   }
 
-  console.log(player.inventory)
   await userRef.update({
     ...doc.data(),
     resources: player.resources,

@@ -167,7 +167,7 @@ export async function getEndTurn(userId: string, actions: string[]) {
 
     if(drop){
       const getItem: number = 0 % 4
-      console.log(getItem)
+
       switch (getItem) {
         case 0:
           player.resources.metals = ++player.resources.metals
