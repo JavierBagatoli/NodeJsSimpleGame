@@ -14,16 +14,32 @@ export default interface StatsControl{
   actionsMax: number,
 }
 
-export interface EnemyStatscontrol extends StatsControl{
-    id: string,
-    idTypeImage: number,
-    dificultad: number,
-    debuf: {
-        poison: number,
-        slowness: number,
-        fire: number,
-        fragil: number,
-    }
-    states: string[]
-    newResourses?: PlayerResourses
+export interface EnemyDatabase {
+  actions: number;
+  actionsMax: number;
+  baseAttack: number;
+
+  bonos: EnemyBonos
+
+  debuf: DebufEnemy;
+
+  dificultad: number;
+  id: string;
+  idTypeImage: number;
+  life: number;
+  lifeMax: number;
 }
+
+export interface EnemyBonos {
+  actions: number;
+  attack: number;
+  defense: number;
+  luck: number;
+};
+
+export interface DebufEnemy {
+  fire: number;
+  fragil: number;
+  poison: number;
+  slowness: number;
+};

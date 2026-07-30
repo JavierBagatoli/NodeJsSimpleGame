@@ -1,6 +1,4 @@
-import { EnemyStatscontrol } from "../dungeon/dungeon.interfaces"
-
-export interface Player {
+/*export interface Player {
   id: string,
   username: string,
   capitalShipId: number,
@@ -13,7 +11,7 @@ export interface Player {
   inventory: InvetoryItemPlayer[],
   equipment: Equipment,
 }
-
+*/
 export interface PlayerStats{
     damage: number,
     defense: number,
@@ -39,7 +37,7 @@ export interface DungeonInfoPlayer{
     level: number,
     maxLifePlayer: number,
     lifePlayer: number,
-    enemy: EnemyStatscontrol | null
+    enemy: any | null
     lastDeathOnDungeon: string | null
 }
 
@@ -86,3 +84,52 @@ export interface InvetoryItemPlayer{
   id: number;
   cantidad: number
 }
+
+/* Database */
+
+export interface PlayerDatabase {
+  actions: number;
+  actionsMax: number;
+  baseAttack: number;
+
+  bonos: Bones;
+  debuf: Debuffs;
+  dificultad: number;
+
+  equipment: Equipment
+
+  id: string;
+  idTypeImage: number;
+  imgProfile: string;
+
+  inventory: InvetoryItemPlayer[];
+
+  life: number;
+  lifeMax: number;
+
+  name: string;
+
+  resources: PlayerResourses;
+  states: unknown[];
+  stats: PlayerStats;
+  wallet: Wallet;
+}
+
+export interface Wallet{
+    credits: number;
+    platino: number;
+};
+
+export interface Debuffs {
+    fire: number;
+    fragil: number;
+    poison: number;
+    slowness: number;
+};
+
+export interface Bones {
+    actions: number;
+    attack: number;
+    defense: number;
+    luck: number;
+};

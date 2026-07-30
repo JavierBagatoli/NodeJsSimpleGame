@@ -2,7 +2,8 @@ import { dataFakeItemBase } from "../../fakeData/fakeBiblioteca.data";
 import { db } from "../../firebase";
 import { ErrorFindData } from "../../globals/error.interface";
 import { findCapitalShip, findPlayer } from "../../globals/player.aux";
-import { EnemyStatscontrol } from "./dungeon.interfaces";
+import { TABLE_ENEMY, TABLE_PLAYER } from "../../globals/tablesOfDatabase.consts";
+import { EnemyDatabase } from "./dungeon.interfaces";
 
 export async function getListOfDungeonsAvalibles(userId: string) {
   //const player = findPlayer(userId)
@@ -14,28 +15,29 @@ export async function getListOfDungeonsAvalibles(userId: string) {
   return [1,2,3,4]//ship.dungeonAvalibles;
 }
 
-export async function getCreateEnemy(userId: string, level: number):Promise<EnemyStatscontrol | ErrorFindData> {
+export async function getCreateEnemy(userId: string, dificultad: number):Promise<EnemyDatabase | ErrorFindData> {
   //let player = findPlayer(userId)
   //if(!player || "error" in player) return player
 
-  const expectedLife = Math.round(Math.random()*10*(level+1))
+  const expectedLife = Math.round(Math.random()*10*(dificultad+1))
+  const damage: number = setDamage(dificultad)
 
-  const enemy: EnemyStatscontrol = {
+
+  const enemy: EnemyDatabase = {
     id: userId,
     idTypeImage: Math.floor(Math.random()*5),
-    dificultad: level+1,
+    dificultad: dificultad+1,
     life: expectedLife,
     lifeMax: expectedLife,
     bonos: {
       defense: 0,
-      attack: 0,
+      attack: damage,
       actions: 0,
-      luck: 0
+      luck: 0,
     },
     baseAttack: 1,
     actions: 1,
     actionsMax: 1,
-    states: [],
     debuf: {
         poison: 0,
         slowness: 0,
@@ -45,7 +47,7 @@ export async function getCreateEnemy(userId: string, level: number):Promise<Enem
   }
 
   try{
-    const userRef = db.collection('Enemy').doc(userId);
+    const userRef = db.collection(TABLE_ENEMY).doc(userId);
     const doc = await userRef.get();
 
     if (!doc.exists) {
@@ -58,6 +60,16 @@ export async function getCreateEnemy(userId: string, level: number):Promise<Enem
   return enemy;
 }
 
+const setDamage = (level: number): number => {
+    let dmg: number = 0;
+    if(level >= 4){
+      dmg = 2;
+    }else if(level >= 2){
+      dmg = 1
+    }
+    return dmg
+  }
+
 export async function getEndTurn(userId: string, actions: string[]) {
   const todayDate = new Date();
   const shortFormDate = `${todayDate.getDate()}-${todayDate.getMonth()+1}`
@@ -68,7 +80,7 @@ export async function getEndTurn(userId: string, actions: string[]) {
 
   //if(player.dungeonInfo.lastDeathOnDungeon === shortFormDate) return 4
 
-  const userRef = db.collection('Player').doc(userId);
+  const userRef = db.collection(TABLE_PLAYER).doc(userId);
   const docPlayer = await userRef.get();
 
   if(!docPlayer || 'error' in docPlayer) return
@@ -88,10 +100,10 @@ export async function getEndTurn(userId: string, actions: string[]) {
     }
   })
 
-  const userRefEnemy = db.collection('Enemy').doc(userId);
+  const userRefEnemy = db.collection(TABLE_ENEMY).doc(userId);
   const docEnemy = await userRefEnemy.get();
 
-  let enemyForPlayer = docEnemy.data()
+  let enemyForPlayer: EnemyDatabase | undefined = docEnemy.data() as EnemyDatabase | undefined
   if(!enemyForPlayer) return 2
 
   let slownessDamage = enemyForPlayer.debuf.slowness > 0 ? enemyForPlayer.debuf.slowness -1: 0;
@@ -129,14 +141,15 @@ export async function getEndTurn(userId: string, actions: string[]) {
   }
 
   if(finalEnemy.life > 0){
-    if(countOfDefenses <= 0){
-      //player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
-    }else{
-      countOfDefenses > 0? countOfDefenses = countOfDefenses-enemyForPlayer.baseAttack: countOfDefenses = 0
+    for (let index = 0. ; index < (enemyForPlayer.actions + enemyForPlayer.bonos.actions); index++) {
+      if(countOfDefenses <= 0){
+        //player.dungeonInfo.lifePlayer = player.dungeonInfo.lifePlayer-1
+      }else{
+        countOfDefenses > 0? countOfDefenses = countOfDefenses-enemyForPlayer.baseAttack: countOfDefenses = 0
+      }
     }
-
     //if(player.dungeonInfo.lifePlayer <= 0){
-      //player.dungeonInfo.lastDeathOnDungeon = shortFormDate
+    //  player.dungeonInfo.lastDeathOnDungeon = shortFormDate
     //  return 3
     //}
   }
@@ -154,8 +167,8 @@ export async function getEndTurn(userId: string, actions: string[]) {
       player.resources.cores = player.resources.cores+1
     }
 
+    const newEnemy = await getCreateEnemy(userId, enemyForPlayer.dificultad-1 )?? null
     enemyForPlayer = undefined
-    const newEnemy = await getCreateEnemy(userId, 0 /*player.dungeonInfo.level*/)?? null
 
     if("life" in newEnemy){
       finalEnemy = newEnemy;

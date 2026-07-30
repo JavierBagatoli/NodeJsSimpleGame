@@ -1,12 +1,10 @@
 import admin from "firebase-admin";
-//import serviceAccount from "../serviceAccountKey.json" assert { type: "json" };
+import serviceAccount from "../serviceAccountKey.json" assert { type: "json" };
 
-
-
-  //admin.initializeApp({
-  //  credential: admin.credential.cert(serviceAccount),
-  //});
-
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+/*
   admin.initializeApp({
     credential: admin.credential.cert({
       projectId: process.env.FIREBASE_PROJECT_ID,
@@ -14,7 +12,7 @@ import admin from "firebase-admin";
       privateKey: process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n"),
     }),
   });
-
+*/
 
 
 export default admin;

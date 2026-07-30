@@ -73,7 +73,7 @@ export async function changeCapitalShip(userId: string, capitalShipId: number, z
 
   if(player.id !== capitalShip.idLeader) return {error: "No tiene permiso para controlar la nave capital"}
   
-  player.capitalShipId = capitalShipId;
+  //player.capitalShipId = capitalShipId; //TODO Añadir sistema de Clanes
 
   return {
     message: `${capitalShip.name} se ha movido a la zona ${zona}`,

@@ -1,11 +1,12 @@
 import { dataFakeItemBase } from "../../fakeData/fakeBiblioteca.data";
 import { db } from "../../firebase";
 import { findPlayer } from "../../globals/player.aux";
+import { TABLE_PLAYER } from "../../globals/tablesOfDatabase.consts";
 
 export const tryBuyItemForPlayer = async (userId: string, itemId: number) => {
   let player = await findPlayer(userId)
   if("error" in player) return player;
-  const userRef = db.collection('Player').doc(userId);
+  const userRef = db.collection(TABLE_PLAYER).doc(userId);
   const doc = await userRef.get();
 
   const itemSelected = dataFakeItemBase[itemId]

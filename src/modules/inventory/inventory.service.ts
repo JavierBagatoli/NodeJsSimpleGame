@@ -1,6 +1,7 @@
 import { dataFakeItemBase, Item } from "../../fakeData/fakeBiblioteca.data";
 import { db } from "../../firebase";
 import { findPlayer } from "../../globals/player.aux";
+import { TABLE_PLAYER } from "../../globals/tablesOfDatabase.consts";
 import { PlayerContext } from "../player/player.interfaces";
 
 export async function getInventario(userId: string) {
@@ -67,7 +68,7 @@ export async function setInvetory(userId: string, idSlot: string, idItem: number
 
   console.log(player)
   
-  const userRef = db.collection('Player').doc(userId);
+  const userRef = db.collection(TABLE_PLAYER).doc(userId);
   const doc = await userRef.get();
   
   userRef.update({
