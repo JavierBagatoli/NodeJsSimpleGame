@@ -53,7 +53,7 @@ router.get("/set/:idSlot/:idInventory", async (req, res) => {
     });
   }
 
-  console.log(">>>")
+
   const idSlot = req.params.idSlot;
   const playerIdinventory = Number(req.params.idInventory);
 
@@ -66,6 +66,7 @@ router.get("/set/:idSlot/:idInventory", async (req, res) => {
   }
 
   const changes = await setInvetory(playerId, idSlot, playerIdinventory);
+
   if (!changes || "error" in changes) {
     return res.status(404).json(changes);
   }

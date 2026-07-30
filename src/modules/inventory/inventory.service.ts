@@ -1,8 +1,9 @@
 import { dataFakeItemBase, Item } from "../../fakeData/fakeBiblioteca.data";
 import { db } from "../../firebase";
+import { ErrorFindData } from "../../globals/error.interface";
 import { findPlayer } from "../../globals/player.aux";
 import { TABLE_PLAYER } from "../../globals/tablesOfDatabase.consts";
-import { PlayerContext } from "../player/player.interfaces";
+import { PlayerDatabase } from "../player/player.interfaces";
 
 export async function getInventario(userId: string) {
   let player = await findPlayer(userId)
@@ -19,14 +20,14 @@ const ROOMS = ['room0','room1','room2','room3','room4',]
  * @param idItem 
  * @returns 
  */
-export async function setInvetory(userId: string, idSlot: string, idItem: number) {
-  let player = await findPlayer(userId)
+export async function setInvetory(userId: string, idSlot: string, idItem: number):Promise<PlayerDatabase | ErrorFindData> {
+  let player: PlayerDatabase |ErrorFindData = await findPlayer(userId)
   if("error" in player) return player;
 
   if(!player.inventory.find(item => item.id === idItem)) return {error: `El usuario no dispone del item ${idItem}`}
   let response : { error: string } | { success: string } = errorItem()
 
-  if(!dataFakeItemBase[idItem]) return
+  if(!dataFakeItemBase[idItem]) return {error: "Item No encontrado"}
   let option: string = idSlot.split("-")[1];
   if(option === 'weapon'){
     if(dataFakeItemBase[idItem].type !== 'weapon'){
@@ -65,17 +66,17 @@ export async function setInvetory(userId: string, idSlot: string, idItem: number
   }
 
   updateStats(player)
-
-  console.log(player)
   
   const userRef = db.collection(TABLE_PLAYER).doc(userId);
   const doc = await userRef.get();
-  
+
   userRef.update({
     ...doc.data(),
     equipment: player.equipment,
     stats: player.stats
   })
+
+  return player
 }
 
 function errorItem(){
