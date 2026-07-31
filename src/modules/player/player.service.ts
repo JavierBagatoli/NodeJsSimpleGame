@@ -3,7 +3,7 @@ import { db } from "../../firebase";
 import { ErrorFindData } from "../../globals/error.interface";
 import { TABLE_PLAYER } from "../../globals/tablesOfDatabase.consts";
 import { NEW_PLAYER } from "./player.constants";
-import { PlayerContext, PlayerDatabase } from "./player.interfaces";
+import { PlayerDatabase } from "./player.interfaces";
 
 export async function getPlayer(userId: string): Promise<PlayerDatabase | ErrorFindData> {
   let player: PlayerDatabase | undefined = dataFakePlayers.find(
