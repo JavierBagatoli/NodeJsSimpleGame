@@ -156,9 +156,10 @@ export async function getEndTurn(userId: string, actions: string[]) {
 
   let addResources: boolean = false;
   const val: number = Math.round(Math.random())
+ 
   if(finalEnemy.life <= 0){
     addResources= true;
-    const typeResource = enemyForPlayer.dificultad % 4
+    const typeResource = (enemyForPlayer.dificultad-1) % 4
     if(typeResource === 0){
       player.resources.metals = player.resources.metals+1
     }else if(typeResource === 1){
@@ -184,7 +185,7 @@ export async function getEndTurn(userId: string, actions: string[]) {
       resources: player.resources
     })   
   }
-  
+
   await userRefEnemy.update(finalEnemy)
   return addResources? {
     ...finalEnemy,
