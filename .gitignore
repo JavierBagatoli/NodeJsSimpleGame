@@ -1,6 +1,7 @@
+.env
+
 node_modules
 
 serviceAccountKey.json
 
 dist
-.env
