@@ -43,3 +43,10 @@ export interface DebufEnemy {
   poison: number;
   slowness: number;
 };
+
+export interface PlayerResoursesOptionals{
+    circuits?: number,
+    cores?: number,
+    metals?: number,
+    crystals?: number,
+}

@@ -1,9 +1,8 @@
 import { dataFakeItemBase } from "../../fakeData/fakeBiblioteca.data";
 import { db } from "../../firebase";
 import { ErrorFindData } from "../../globals/error.interface";
-import { findCapitalShip, findPlayer } from "../../globals/player.aux";
 import { TABLE_ENEMY, TABLE_PLAYER } from "../../globals/tablesOfDatabase.consts";
-import { EnemyDatabase } from "./dungeon.interfaces";
+import { EnemyDatabase, PlayerResoursesOptionals } from "./dungeon.interfaces";
 
 export async function getListOfDungeonsAvalibles(userId: string) {
   //const player = findPlayer(userId)
@@ -157,22 +156,37 @@ export async function getEndTurn(userId: string, actions: string[]) {
   let addResources: boolean = false;
   const val: number = Math.round(Math.random())
  
+  let sendNewItemsToFront: PlayerResoursesOptionals = {}
+
   if(finalEnemy.life <= 0){
     addResources= true;
     const typeResource = (enemyForPlayer.dificultad-1) % 4
     if(typeResource === 0){
-      player.resources.metals = player.resources.metals+1
+      sendNewItemsToFront = {
+        metals: 1
+      }
     }else if(typeResource === 1){
-      player.resources.metals = player.resources.metals+val*3
-      player.resources.crystals = player.resources.crystals+1
+      sendNewItemsToFront = {
+        metals: val*3,
+        crystals: 1
+      }
     }else if(typeResource === 2){
-      player.resources.metals = player.resources.metals+val*3
-      player.resources.crystals = player.resources.crystals+val*2
-      player.resources.circuits = player.resources.circuits+1
+      sendNewItemsToFront = {
+        metals: val*3,
+        crystals: val*2,
+        circuits: 1
+      }
     }else if(typeResource === 3){
-      player.resources.crystals = player.resources.crystals+val*3
-      player.resources.cores = player.resources.cores+1
+      sendNewItemsToFront = {
+        crystals: val*3,
+        cores: 1
+      }
     }
+    
+    player.resources.metals = player.resources.metals    +  (sendNewItemsToFront.metals ?? 0)
+    player.resources.crystals = player.resources.crystals+  (sendNewItemsToFront.crystals ?? 0)
+    player.resources.circuits = player.resources.circuits+  (sendNewItemsToFront.circuits ?? 0)
+    player.resources.cores = player.resources.cores      +  (sendNewItemsToFront.cores ?? 0)
 
     const newEnemy = await getCreateEnemy(userId, enemyForPlayer.dificultad-1 )?? null
     enemyForPlayer = undefined
@@ -189,6 +203,6 @@ export async function getEndTurn(userId: string, actions: string[]) {
   await userRefEnemy.update(finalEnemy)
   return addResources? {
     ...finalEnemy,
-    resources: player.resources,
+    resources: sendNewItemsToFront,
   }: finalEnemy;
 }
